@@ -28,8 +28,27 @@ namespace CinemaBookingClient
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-             
-            services.AddScoped<ICinemaDataService, SqlCinemaDataService>();
+
+            var provider = (DBProviderType) Configuration.GetValue<int>("CinemaDataBaseProvider");
+
+            switch(provider)
+            {
+                case DBProviderType.EFProvider:
+                    services.AddScoped<ICinemaDataService, SqlCinemaDataService>();
+                    break;
+                case DBProviderType.ADONetDisconnectedProvider:
+                    services.AddScoped<ICinemaDataService, AdonetDisconnectedDataService>();
+                    break;
+                case DBProviderType.ADONetOpenconnectedProvider:
+                    throw new NotImplementedException("No set connection string!");
+                    //services.AddScoped<ICinemaDataService, SqlCinemaDataService>();
+                    break;
+                default:
+                    services.AddScoped<ICinemaDataService, SqlCinemaDataService>();
+                    break;
+            }           
+
+
             if (Configuration.GetValue<bool>("CinemaSchemeRemote"))
                 services.AddScoped<ICinemaSeatPlanWS, CinemaSeatPlanWS>();
             else
@@ -69,5 +88,11 @@ namespace CinemaBookingClient
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
+    }
+    public enum DBProviderType
+    {
+        EFProvider = 0,
+        ADONetDisconnectedProvider = 1,
+        ADONetOpenconnectedProvider = 2
     }
 }
