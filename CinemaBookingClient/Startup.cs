@@ -40,8 +40,7 @@ namespace CinemaBookingClient
                     services.AddScoped<ICinemaDataService, AdonetDisconnectedDataService>();
                     break;
                 case DBProviderType.ADONetOpenconnectedProvider:
-                    throw new NotImplementedException("No set connection string!");
-                    //services.AddScoped<ICinemaDataService, SqlCinemaDataService>();
+                    services.AddScoped<ICinemaDataService, AdonetConnectedDataService>();
                     break;
                 default:
                     services.AddScoped<ICinemaDataService, SqlCinemaDataService>();

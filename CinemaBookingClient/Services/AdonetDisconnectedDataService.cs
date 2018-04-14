@@ -193,7 +193,7 @@ namespace CinemaBookingClient.Services
                     AreaNumber = (int) z["AreaNumber"],
                     ColumnIndex = (int)z["ColumnIndex"],
                     RowIndex = (int)z["RowIndex"],
-                    OrderId = (int)z["Id"]
+                    OrderId = (int)z["Id"]                    
                 });
 
                 order.Tickets = tickets.ToList();
